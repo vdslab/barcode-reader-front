@@ -3,7 +3,6 @@ import config from "./config.json";
 import Quagga from "quagga";
 
 const Scanner = (props) => {
-  // eslint-disable-next-line react/prop-types
   const { onDetected } = props;
 
   useEffect(() => {
@@ -18,7 +17,6 @@ const Scanner = (props) => {
     });
 
     Quagga.onDetected(detected);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const detected = result => {
