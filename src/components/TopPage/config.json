@@ -15,7 +15,8 @@
     "numOfWorkers": 2,
     "frequency": 10,
     "decoder": {
-      "readers": ["ean_reader"]
+      "readers": ["ean_reader"],
+      "multiple": false
     },
     "locate": true
   }

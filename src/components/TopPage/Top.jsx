@@ -6,8 +6,21 @@ export const Top = () => {
   const [camera, setCamera] = useState(true);
   const [result, setResult] = useState(null);
 
-  const onDetected = result => {
-    setResult(result);
+  let code;
+  let count = 0;
+  const onDetected = (result) => {
+    if(code == result){
+      count++;
+    } else {
+      count = 0;
+      code = result;
+    }
+
+    if(count >= 20) {
+      setResult(result);
+    } else {
+      setResult(null);
+    }
   };
 
 
