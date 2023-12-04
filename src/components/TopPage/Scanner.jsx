@@ -1,31 +1,23 @@
-import { useEffect } from "react";
-import config from "./config.json";
-import Quagga from "quagga";
+import { BrowserMultiFormatReader } from '@zxing/browser'
+import { Result } from '@zxing/library'
+import { useMemo, useRef } from 'react'
+import { useDebounce } from 'react-use'
 
-const Scanner = (props) => {
-  const { onDetected } = props;
+export const Scanner = onReadCode => {
+  const videoRef = useRef()
+  const codeReader = useMemo(() => new BrowserMultiFormatReader(), [])
 
-  useEffect(() => {
-    Quagga.init(config, err => {
-      if (err) {
-        console.log(err, "error msg");
+  useDebounce(async () => {
+    if (!videoRef.current) return
+    await codeReader.decodeFromVideoDevice(undefined, videoRef.current, (result, error) => {
+      if (!result) return
+      if (error) {
+        console.log('ERROR!! : ', error)
+        return
       }
-      Quagga.start();
-      return () => {
-        Quagga.stop()
-      }
-    });
+      onReadCode?.(result)
+    })
+  }, 2000)
 
-    Quagga.onDetected(detected);
-  }, []);
-
-  const detected = result => {
-    onDetected(result.codeResult.code);
-  };
-
-  return (
-    <div id="interactive" className="viewport" />
-  );
-};
-
-export default Scanner;
+  return <video style={{ width: '50%' }} ref={videoRef} />
+}
